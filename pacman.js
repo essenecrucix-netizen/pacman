@@ -1,13 +1,10 @@
-<script>
-
 // Basic Pacman Game for Web Browser
 
-// Create the canvas and get the 2D context
-const canvas = document.createElement('canvas');
+// Get the canvas and context from the existing DOM
+const canvas = document.getElementById('pacmanCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = 400;
 canvas.height = 400;
-document.body.appendChild(canvas);
 
 // Define the game variables
 let pacman = { x: 200, y: 200, size: 20, dx: 0, dy: 0, invincible: false, invincibleTimer: 0 };
@@ -268,7 +265,9 @@ window.addEventListener('keydown', e => {
 
 // Game loop
 function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'black'; // Set the canvas background color
+    ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the entire canvas
+
     drawMaze();
     drawPacman();
     drawPellets();
@@ -286,5 +285,3 @@ function gameLoop() {
 // Start the game
 createPellets();
 gameLoop();
-
-</script>
