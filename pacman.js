@@ -1,5 +1,4 @@
 // Basic Pacman Game for Web Browser
-console.log("Pacman.js loaded and executed!");
 
 // Get the canvas and context from the existing DOM
 const canvas = document.getElementById('pacmanCanvas');
@@ -199,75 +198,57 @@ function updateGhosts() {
     });
 }
 
-// Check for collisions with pellets
+// Collision checks
 function checkCollisions() {
     pellets = pellets.filter(pellet => {
-        const dist = Math.hypot(pacman.x - pellet.x, pacman.y - pellet.y);
-        if (dist < pacman.size) {
+        const distance = Math.sqrt(
+            (pacman.x - pellet.x) ** 2 + (pacman.y - pellet.y) ** 2
+        );
+        if (distance < pacman.size) {
             score += 10;
-            return false; // Remove the pellet
+            return false;
         }
         return true;
     });
 }
 
-// Check for collisions with power pellets
 function checkPowerPelletCollisions() {
     powerPellets = powerPellets.filter(pellet => {
-        const dist = Math.hypot(pacman.x - pellet.x, pacman.y - pellet.y);
-        if (dist < pacman.size) {
+        const distance = Math.sqrt(
+            (pacman.x - pellet.x) ** 2 + (pacman.y - pellet.y) ** 2
+        );
+        if (distance < pacman.size) {
             pacman.invincible = true;
-            pacman.invincibleTimer = 300; // 300 frames of invincibility
-            score += 50;
-            return false; // Remove the power pellet
+            pacman.invincibleTimer = 300; // 5 seconds at 60fps
+            return false;
         }
         return true;
     });
 }
 
-// Check for collisions with ghosts
 function checkGhostCollisions() {
     ghosts.forEach(ghost => {
-        const dist = Math.hypot(pacman.x - ghost.x, pacman.y - ghost.y);
-        if (dist < pacman.size) {
+        const distance = Math.sqrt(
+            (pacman.x - ghost.x) ** 2 + (pacman.y - ghost.y) ** 2
+        );
+        if (distance < pacman.size + ghost.size) {
             if (pacman.invincible) {
                 score += 100;
                 ghost.x = Math.random() * canvas.width;
-                ghost.y = Math.random() * canvas.height; // Reset ghost position
+                ghost.y = Math.random() * canvas.height;
             } else {
-                alert('Game Over!');
+                // Game over
+                alert('Game Over! Your score: ' + score);
                 document.location.reload();
             }
         }
     });
 }
 
-// Handle keyboard input
-window.addEventListener('keydown', e => {
-    switch (e.key) {
-        case 'ArrowUp':
-            pacman.dx = 0;
-            pacman.dy = -gridSize;
-            break;
-        case 'ArrowDown':
-            pacman.dx = 0;
-            pacman.dy = gridSize;
-            break;
-        case 'ArrowLeft':
-            pacman.dx = -gridSize;
-            pacman.dy = 0;
-            break;
-        case 'ArrowRight':
-            pacman.dx = gridSize;
-            pacman.dy = 0;
-            break;
-    }
-});
-
 // Game loop
 function gameLoop() {
-    ctx.fillStyle = 'black'; // Set the canvas background color
-    ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the entire canvas
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     drawMaze();
     drawPacman();
@@ -275,14 +256,20 @@ function gameLoop() {
     drawPowerPellets();
     drawGhosts();
     drawScore();
+
     updatePacman();
     updateGhosts();
     checkCollisions();
     checkPowerPelletCollisions();
     checkGhostCollisions();
+
     requestAnimationFrame(gameLoop);
 }
 
 // Start the game
-createPellets();
-gameLoop();
+window.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM fully loaded. Starting game...");
+    createPellets();
+    gameLoop();
+});
+
