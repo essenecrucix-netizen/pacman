@@ -10,7 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    console.log("Canvas element found:", canvas);
+
     const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.error("Failed to get 2D context for the canvas.");
+        return;
+    }
+    console.log("2D context initialized successfully.");
+
     canvas.width = 400;
     canvas.height = 400;
 
@@ -276,5 +284,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start the game
     createPellets();
+    console.log("Pellets initialized:", pellets);
     gameLoop();
 });
