@@ -1,4 +1,5 @@
 // Basic Pacman Game for Web Browser
+console.log("Pacman.js loaded and executed!");
 
 // Get the canvas and context from the existing DOM
 const canvas = document.getElementById('pacmanCanvas');
